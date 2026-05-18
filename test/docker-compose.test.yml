@@ -1,0 +1,31 @@
+services:
+  app:
+    build:
+      context: ..
+    environment:
+      LLM_MOCK: "true"
+    ports:
+      - "8000:8000"
+    volumes:
+      - test-data:/app/db
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/api/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+      start_period: 30s
+
+  playwright:
+    image: mcr.microsoft.com/playwright:v1.48.0-jammy
+    depends_on:
+      app:
+        condition: service_healthy
+    working_dir: /tests
+    volumes:
+      - .:/tests
+    environment:
+      BASE_URL: "http://app:8000"
+    command: sh -c "npm ci && npx playwright test"
+
+volumes:
+  test-data:

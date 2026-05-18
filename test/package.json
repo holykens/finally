@@ -1,0 +1,13 @@
+{
+  "name": "finally-e2e-tests",
+  "version": "1.0.0",
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "@types/node": "^20.0.0"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:api": "playwright test tests/api.spec.ts"
+  }
+}
